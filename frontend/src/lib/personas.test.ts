@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPersonaById, PERSONAS } from "./personas";
+import { getPersonaById } from "./personas";
 
 describe("getPersonaById", () => {
   it("retrouve un persona existant par son id", () => {
@@ -10,11 +10,5 @@ describe("getPersonaById", () => {
     expect(getPersonaById("inconnu")).toBeUndefined();
     expect(getPersonaById(null)).toBeUndefined();
     expect(getPersonaById(undefined)).toBeUndefined();
-  });
-
-  it("garde chaque persona avec une position mémorisée", () => {
-    for (const persona of PERSONAS) {
-      expect(persona.position.module.length).toBeGreaterThan(0);
-    }
   });
 });

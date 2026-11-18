@@ -16,4 +16,16 @@ test("Démo : le cas passant", async ({ page }) => {
     await expect(page.getByRole("heading", { name: "Bonjour Julie," })).toBeVisible();
     await expect(page.getByText("Retrouver de l'énergie en douceur")).toBeVisible();
   });
+
+  await test.step("Je clique sur « Reprendre » et ma position avance", async () => {
+    const minuteAvant = await page.locator("strong").nth(1).innerText();
+    await page.getByRole("button", { name: "Reprendre exactement là où je me suis arrêtée" }).click();
+    await expect(page.locator("strong").nth(1)).not.toHaveText(minuteAvant);
+  });
+
+  await test.step("Après un rechargement, ma nouvelle position est toujours là", async () => {
+    const minuteApresClic = await page.locator("strong").nth(1).innerText();
+    await page.reload();
+    await expect(page.locator("strong").nth(1)).toHaveText(minuteApresClic);
+  });
 });

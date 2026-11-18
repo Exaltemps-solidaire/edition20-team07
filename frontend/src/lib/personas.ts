@@ -1,4 +1,6 @@
 // Données d'exemple pour l'itération 1 : pas de connexion, on choisit un persona dans une liste.
+// Depuis l'itération 2, la position (module/minute/étape) n'est plus ici : elle vient de l'API
+// (voir api/src/positions.ts), seule source de vérité pour qu'elle survive à un rechargement.
 export type Persona = {
   id: string;
   nom: string;
@@ -6,12 +8,6 @@ export type Persona = {
   stade: number;
   stadeLibelle: string;
   thematique: string;
-  position: {
-    module: string;
-    minuteVideo: number;
-    etapeQuiz: number;
-    etapesQuizTotal: number;
-  };
 };
 
 export const PERSONAS: Persona[] = [
@@ -22,12 +18,6 @@ export const PERSONAS: Persona[] = [
     stade: 3,
     stadeLibelle: "Sous pression",
     thematique: "En reconstruction",
-    position: {
-      module: "Retrouver de l'énergie en douceur",
-      minuteVideo: 7,
-      etapeQuiz: 2,
-      etapesQuizTotal: 5,
-    },
   },
   {
     id: "amel",
@@ -36,12 +26,6 @@ export const PERSONAS: Persona[] = [
     stade: 2,
     stadeLibelle: "Vigilante",
     thematique: "En remobilisation",
-    position: {
-      module: "Réévaluer vos priorités",
-      minuteVideo: 0,
-      etapeQuiz: 1,
-      etapesQuizTotal: 4,
-    },
   },
 ];
 

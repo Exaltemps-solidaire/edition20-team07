@@ -3,7 +3,7 @@
 **Plan validé le 2026-11-18** (le développeur a lancé `/iteration 1` sans correction du plan).
 
 - **Source du plan** : proposé par l'agent (aucun plan d'itérations trouvé dans la passation : ni fichier `cadrage/*iteration*`, ni clé `iterations` dans `passation.json`).
-- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes.
+- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes.
 - **Durée du tour de test PM Lab** : 10 minutes (valeur par défaut, le développeur ne savait pas).
 - **Capacité estimée** : une itération coûte au moins (codage ≤10 min) + ~5 min de publication + 10 min de tour de test, soit 15 à 25 min. Sur 90 minutes, ~3 itérations complètes tiennent confortablement ; une 4e ne tient que si les précédentes vont plus vite que prévu.
 - **Hors périmètre** (repris du PRD, `passation/PASSATION.md`) : connexion/création de compte, paiement/adhésion, back-office, parcours ACTIV' et Sentinelle, recommandation BBA vs BIB, notifications push/email, gestion des ateliers socles.
@@ -60,7 +60,21 @@
 - **Fichiers prévus** : `api/src/routes.ts` (route `/api/v1/positions/:persona`), un petit stockage en mémoire côté API, le tableau de bord front (appel `fetch` relatif).
 - **Tests unitaires prévus** : 1 à 2, sur la logique de lecture/écriture de la position (règle métier, pas le serveur HTTP).
 - **Étapes ajoutées à la démo** : cliquer « Reprendre », recharger la page, vérifier que la position a changé et persiste.
-- **Bilan** : _à remplir en fin d'itération_
+- **Bilan** :
+  - Durée de codage réelle : 3 minutes (pas de dépassement).
+  - Critères d'acceptation : les 3 satisfaits — vérifiés directement sur `localhost:8081` (`GET /api/v1/positions/julie` renvoie le JSON module/minute/étape ; `POST` avance la minute et persiste : relu identique juste après ; `amel` garde sa propre position, indépendante de `julie`).
+  - ⚠️ Limite constatée en vérifiant localement : `nginx.conf` ne proxie pas `/api/` (son commentaire le dit explicitement, c'est le rôle du proxy d'entrée) et celui-ci n'existe que sur l'URL publique, injoignable depuis la VM. Le flux complet navigateur → `/api/v1/positions/...` via le port 8080 ne peut donc pas être vérifié depuis la machine ; seule la logique API elle-même (port 8081 direct) l'a été ici. Demandé au développeur de vérifier dans son navigateur, sur `$URL_PUBLIQUE`, que cliquer « Reprendre » change la position affichée et qu'elle reste après un rechargement.
+  - Reporté : rien de nouveau pour cette itération.
+  - Le harnais n'a rien bloqué cette fois : `npm test` (7 tests) et `./scripts/verifier-deployabilite.sh` passaient dès le premier essai.
+  - Déployé sur la plateforme locale (nouvelles images `api`/`frontend` construites, publiées, `podman compose up -d --force-recreate`) ; `localhost:8080` et `localhost:8081/health` répondent 200. Version 2 signalée à PM Lab.
+  - **Modifications** :
+    - `api/src/positions.ts` : créé — stockage en mémoire des positions par persona, `lirePosition`, `avancerPosition`, et `progresser` (logique pure, testée) — sert les 3 critères.
+    - `api/src/positions.test.ts` : créé — 3 tests unitaires sur `progresser`, la persistance après avancée, et le cas persona inconnu.
+    - `api/src/routes.ts` : ajoute les routes `GET`/`POST /api/v1/positions/:persona`, en plus de `/health` et `/sante` — sert les 3 critères.
+    - `frontend/src/lib/personas.ts` : retire le champ `position` (en dur) des personas ; la position n'a plus qu'une source de vérité, l'API — sert les critères 1 et 2.
+    - `frontend/src/lib/personas.test.ts` : retire le test devenu obsolète sur `persona.position`.
+    - `frontend/src/app/tableau-de-bord/page.tsx` : lit la position via `fetch` au chargement, le bouton « Reprendre » fait un `POST` et met à jour l'affichage avec la réponse — sert les 3 critères.
+    - `e2e/demo.spec.ts` : deux étapes ajoutées (clic « Reprendre », rechargement) — non rejouées localement pour la raison ci-dessus (⚠️), seulement vérifiables sur `$URL_PUBLIQUE`.
 
 ---
 
@@ -83,5 +97,7 @@
 
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
-4. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — seulement si le temps restant le permet après l'itération 3 ; sinon signalé comme non fait au pitch.
-5. Dernière itération : stabilisation de ce qui sera montré au pitch (pas de nouvelle fonctionnalité).
+4. Catalogue de modules fictifs sur la santé du burn-out : un jeu de modules d'exemple (titre, durée, thématique), affiché dans le tableau de bord (section « Mes modules d'accompagnement » du prototype) et repris comme pool de suggestions par le coach de l'itération 3.
+5. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2 (demande ajoutée hors plan initial, dépassait la limite de 3 critères par itération).
+6. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — seulement si le temps restant le permet après l'itération 3 ; sinon signalé comme non fait au pitch.
+7. Dernière itération : stabilisation de ce qui sera montré au pitch (pas de nouvelle fonctionnalité).
