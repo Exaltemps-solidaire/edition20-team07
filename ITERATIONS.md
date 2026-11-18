@@ -106,25 +106,38 @@
 
 ---
 
-## Itération 4 : un catalogue de modules alimente le tableau de bord et les suggestions du coach
+## Itération 4 : identité visuelle minimale (logo, signature, touche de vert doux)
 
-- **Dans le périmètre** : un jeu de modules fictifs (titre, durée, thématique) dans un fichier de données partagé ; affiché dans le tableau de bord (section « Mes modules d'accompagnement », comme dans `passation/croquis/ecran-01-...png`) ; le coach puise sa suggestion dans ce catalogue (par thématique selon l'état choisi) au lieu d'un texte codé en dur à part.
-- **Hors périmètre** : progression personnelle sur chaque module du catalogue (seule « ma reprise » suit une progression, depuis l'itération 2) ; personnalisation du catalogue par persona.
+Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `amelioration.md` est apparu (demande du développeur hors passation initiale, périmètre large : historique de conversation, refonte graphique complète, navigation latérale, parcours conversationnel du coach en plusieurs étapes). Le calcul de capacité (codage + ~5 min de publication + tour de test de l'équipe) ne permettait plus qu'**une seule itération** avant la fin du build. Conformément à la règle de la dernière itération (section 3 de `CLAUDE.md`), tout `amelioration.md` a été reporté après le hackathon (⚠️, décision à faire valider par les cadreurs), de même que le reste du backlog ci-dessous. Le développeur a choisi une itération cosmétique à risque nul plutôt qu'une stabilisation pure.
+
+- **Dans le périmètre** : reprendre un fragment de l'identité graphique demandée dans `amelioration.md` (point 2) sans toucher à la structure des écrans : logo texte « Femmes En Équilibre », signature « Soutenir · Accompagner · Rebondir », une touche d'accent vert doux (`--vert-doux`), affichés en pied de page sur tout l'écran via le layout racine.
+- **Hors périmètre** : tout le reste d'`amelioration.md` (historique de conversation, menu latéral, parcours conversationnel à étapes, cartes de modules enrichies, résumé de fin de session) ; refonte de la palette violet/lavande des écrans existants ; thème sombre ; retour en direct ; catalogue de modules (itération reportée, voir « À venir »).
 - **Critères d'acceptation** :
-  - Étant donné le tableau de bord affiché, quand je le consulte, alors je vois une section « Mes modules d'accompagnement » avec au moins 4 modules (titre, durée, thématique).
-  - Étant donné une réponse donnée au coach, quand il propose une suggestion, alors le module suggéré est un module du catalogue (même titre, même durée), pas un texte distinct.
-  - Étant donné deux états différents (ex. « difficile » et « en pleine forme »), quand je demande une suggestion, alors les modules proposés ont des thématiques cohérentes et différentes (repos vs remobilisation).
-- **Hypothèse de l'équipe couverte** : aucune hypothèse formelle du plan ; prépare le contenu nécessaire pour que les suggestions du coach (itération 3) soient crédibles au pitch, au lieu de 3 textes isolés.
-- **Codage estimé** : 7 minutes
-- **Fichiers prévus** : `frontend/src/lib/modules.ts` (catalogue + types), `frontend/src/lib/modules.test.ts`, `frontend/src/lib/coach.ts` (règle réécrite pour piocher dans le catalogue), `frontend/src/app/tableau-de-bord/page.tsx` + css (nouvelle section).
-- **Tests unitaires prévus** : 2 à 3 — un par état sur la nouvelle règle de suggestion basée catalogue, un sur la présence d'un module par thématique attendue.
-- **Étapes ajoutées à la démo** : vérifier la présence de la section « Mes modules d'accompagnement » sur le tableau de bord.
-- **Bilan** : _à remplir en fin d'itération_
+  - Étant donné n'importe quel écran de l'application, quand il s'affiche, alors le pied de page montre le logo « Femmes En Équilibre » et la signature.
+  - Étant donné le pied de page, quand il s'affiche, alors une touche de vert doux y est visible (bordure/texte), sans régression visuelle sur le reste de l'écran.
+  - Étant donné la suite de tests existante, quand `npm test` tourne, alors les 10 tests passent toujours (changement purement cosmétique, aucune logique touchée).
+- **Hypothèse de l'équipe couverte** : aucune (demande du développeur, hors plan initial) ; fragment choisi d'`amelioration.md` point 2.
+- **Codage estimé** : 5 minutes
+- **Fichiers prévus** : `frontend/src/app/layout.tsx`, `frontend/src/app/layout.module.css` (nouveau), `frontend/src/app/globals.css`.
+- **Tests unitaires prévus** : aucun (changement cosmétique, pas de logique métier) ; `npm test` rejoué pour confirmer l'absence de régression.
+- **Étapes ajoutées à la démo** : aucune (visuel seul, pas une étape du scénario).
+- **Bilan** :
+  - Durée de codage réelle : 4 minutes (pas de dépassement, sous le budget estimé).
+  - Critères d'acceptation : les 3 satisfaits — vérifiés par `curl localhost:8080/` (logo et signature présents dans le HTML rendu) et par `npm test` (10 tests toujours au vert).
+  - Reporté : tout `amelioration.md` sauf ce fragment, et tout le reste du backlog (voir « À venir ») — décision de dernière minute (30 min restantes), ⚠️ à faire valider par les cadreurs après le hackathon.
+  - Le harnais n'a rien bloqué : `./scripts/verifier-deployabilite.sh` ne signalait aucune borne, `npm test` passait du premier coup.
+  - Déployé : seule l'image frontend a changé (l'API n'a pas bougé), reconstruite, publiée, conteneur recréé ; `localhost:8080/` répond 200 avec le nouveau pied de page, `localhost:8081/health` toujours 200. Version 4 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/app/layout.module.css` : créé — styles du pied de page (`.piedDePage`, `.logo`, `.signature`) — sert les critères 1 et 2.
+    - `frontend/src/app/globals.css` : ajoute le jeton `--vert-doux` à `:root` — sert le critère 2.
+    - `frontend/src/app/layout.tsx` : ajoute le pied de page (logo + signature) dans le layout racine, visible sur tout écran — sert le critère 1.
 
 ---
 
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
-5. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2 (demande ajoutée hors plan initial, dépassait la limite de 3 critères par itération).
-6. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — seulement si le temps restant le permet après l'itération 4 ; sinon signalé comme non fait au pitch.
-7. Dernière itération : stabilisation de ce qui sera montré au pitch (pas de nouvelle fonctionnalité).
+5. Catalogue de modules fictifs alimentant le tableau de bord et les suggestions du coach — détaillé une première fois comme « itération 4 » avant l'arrivée d'`amelioration.md` et le recalcul de capacité à 30 minutes restantes ; non codé, reporté après le hackathon avec le reste.
+6. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2.
+7. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — reporté.
+8. `amelioration.md` dans son ensemble (historique de conversation, identité graphique complète, navigation latérale avec « Mon réseau »/« Mes rendez-vous » fonctionnels, parcours conversationnel du coach en 4 étapes avec échelle de burn-out, cartes de modules enrichies, résumé de fin de session) — repéré pendant le hackathon, trop large pour le temps restant ; à soumettre aux cadreurs comme périmètre de suite.
+9. Dernière itération avant le pitch : stabilisation de ce qui est montré (pas de nouvelle fonctionnalité) — à faire si du temps subsiste après l'itération 4 ci-dessus ; sinon, l'itération 4 (cosmétique) est la dernière de ce hackathon.
