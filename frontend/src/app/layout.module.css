@@ -1,6 +1,8 @@
 .shell {
   display: flex;
   align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
 
 .contenu {
@@ -13,17 +15,17 @@
   padding: 16px 24px;
   text-align: center;
   border-top: 2px solid var(--vert-doux);
-  background: #faf7fe;
+  background: var(--carte-fond);
 }
 
 .logo {
   font-weight: 700;
-  color: #4a2a7a;
+  color: var(--violet-texte);
   letter-spacing: 0.02em;
 }
 
 .signature {
   margin-top: 4px;
   font-size: 13px;
-  color: #4b8f63;
+  color: var(--vert-texte);
 }

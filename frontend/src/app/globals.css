@@ -3,12 +3,33 @@
   --foreground: #171717;
   /* Identité L'BURN : violet/lavande en dominante, touche de vert doux en accent. */
   --vert-doux: #a9d8b4;
+  --vert-texte: #4b8f63;
+  --violet-texte: #4a2a7a;
+  --violet-accent: #7c4dbd;
+  --violet-accent-hover: #663e9d;
+  --violet-leger: #ede3fa;
+  --texte-doux: #666;
+  --carte-fond: #faf7fe;
+  --carte-fond-alt: #ffffff;
+  --carte-bordure: #e4d9f5;
+  --degrade-accueil: linear-gradient(180deg, #f6f2fb 0%, #ffffff 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #171326;
     --foreground: #ededed;
+    --vert-doux: #7fb98f;
+    --vert-texte: #8fd1a0;
+    --violet-texte: #e4d9f5;
+    --violet-accent: #a479e0;
+    --violet-accent-hover: #8a5cd1;
+    --violet-leger: #3d2a57;
+    --texte-doux: #b8aed0;
+    --carte-fond: #241a33;
+    --carte-fond-alt: #2c2140;
+    --carte-bordure: #3d2a57;
+    --degrade-accueil: linear-gradient(180deg, #241a33 0%, #171326 100%);
   }
 }
 

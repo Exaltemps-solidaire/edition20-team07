@@ -3,7 +3,7 @@
 **Plan validé le 2026-11-18** (le développeur a lancé `/iteration 1` sans correction du plan).
 
 - **Source du plan** : proposé par l'agent (aucun plan d'itérations trouvé dans la passation : ni fichier `cadrage/*iteration*`, ni clé `iterations` dans `passation.json`).
-- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes. Redemandé avant l'itération 4 : 30 minutes restantes (apparition d'`amelioration.md`, décision de dernière minute). Les cadreurs ont ensuite demandé l'implémentation complète d'`amelioration.md` ; redemandé avant l'itération 5 : 60 minutes, puis 55 minutes au lancement de l'itération 5 — capacité recalculée à 2 itérations complètes au plus (voir note ✂️ sous l'itération 4). L'itération 5 n'a coûté que 2 minutes de codage (10 estimées) ; redemandé au lancement de l'itération 6 : 50 minutes restantes — marge confortable pour cette itération.
+- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes. Redemandé avant l'itération 4 : 30 minutes restantes (apparition d'`amelioration.md`, décision de dernière minute). Les cadreurs ont ensuite demandé l'implémentation complète d'`amelioration.md` ; redemandé avant l'itération 5 : 60 minutes, puis 55 minutes au lancement de l'itération 5 — capacité recalculée à 2 itérations complètes au plus (voir note ✂️ sous l'itération 4). L'itération 5 n'a coûté que 2 minutes de codage (10 estimées) ; redemandé au lancement de l'itération 6 : 50 minutes restantes — marge confortable pour cette itération. Itération 6 également sous le budget (2 min) ; demande du développeur pour une itération 7 non prévue (thème sombre + hauteur du menu latéral) — redemandé : 40 minutes restantes, confortable pour une itération CSS pure.
 - **Durée du tour de test PM Lab** : 10 minutes (valeur par défaut, le développeur ne savait pas).
 - **Capacité estimée** : une itération coûte au moins (codage ≤10 min) + ~5 min de publication + 10 min de tour de test, soit 15 à 25 min. Sur 90 minutes, ~3 itérations complètes tiennent confortablement ; une 4e ne tient que si les précédentes vont plus vite que prévu.
 - **Hors périmètre** (repris du PRD, `passation/PASSATION.md`) : connexion/création de compte, paiement/adhésion, back-office, parcours ACTIV' et Sentinelle, recommandation BBA vs BIB, notifications push/email, gestion des ateliers socles.
@@ -191,10 +191,33 @@ Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `ame
 
 ---
 
+## Itération 7 : Thème sombre cohérent et menu latéral sur toute la hauteur
+
+- **Dans le périmètre** : demande directe du développeur (hors plan initial, item 9 du backlog promu). (a) les couleurs des cartes/menu/pied de page (actuellement en hex figé) passent par des variables CSS définies dans `globals.css`, avec une variante sombre dans le bloc `@media (prefers-color-scheme: dark)` existant, pour que tout l'écran (pas seulement le fond générique) s'adapte. (b) `.shell` (coquille flex de `layout.module.css`) reçoit un `flex: 1` (+ `min-height: 0`) pour occuper toute la hauteur disponible sous le corps de page, afin que le menu latéral (qui s'étire déjà via `align-items: stretch`) couvre toute la hauteur de l'écran au lieu de s'arrêter à la hauteur du contenu.
+- **Hors périmètre** : bouton de bascule manuelle clair/sombre (on suit uniquement la préférence système `prefers-color-scheme`, comme c'était déjà amorcé à l'itération 2) ; retouche des illustrations/icônes.
+- **Critères d'acceptation** :
+  - Étant donné un navigateur en préférence système sombre, quand j'affiche n'importe quel écran (accueil, tableau de bord, coach, rubriques « Bientôt disponible »), alors les cartes, le menu latéral et le pied de page utilisent une palette sombre lisible (plus seulement le fond générique du `body`).
+  - Étant donné n'importe quel écran avec un persona choisi, quand la page s'affiche, alors le menu latéral visuellement s'étend sur toute la hauteur de la fenêtre, sans espace blanc/sombre entre son bas et le pied de page.
+  - Étant donné le mode clair (déjà en place), quand la page s'affiche, alors le rendu est inchangé par rapport à l'itération 6.
+- **Codage estimé** : 8 minutes
+- **Fichiers prévus** : `frontend/src/app/globals.css` (nouvelles variables de palette + overrides sombres), `frontend/src/app/layout.module.css` (fix hauteur + variables), `frontend/src/app/page.module.css`, `frontend/src/app/coach/page.module.css`, `frontend/src/app/tableau-de-bord/page.module.css`, `frontend/src/components/Sidebar.module.css`, `frontend/src/components/RubriqueBientotDisponible.module.css` (remplacement des couleurs figées par les variables).
+- **Tests unitaires prévus** : aucun — changement purement visuel (CSS), pas de logique métier ; `npm test` rejoué pour confirmer l'absence de régression.
+- **Bilan** :
+  - Durée de codage réelle : 2 minutes (pas de dépassement).
+  - Critères d'acceptation : les 3 satisfaits — toutes les couleurs des cartes/menu/pied de page passent désormais par des variables CSS (`--carte-fond`, `--carte-bordure`, `--violet-texte`, `--violet-accent`, `--vert-texte`, etc.) définies dans `globals.css`, avec une variante sombre complète dans le `@media (prefers-color-scheme: dark)` existant (vérifié par grep : plus aucune couleur figée hors `globals.css`, à l'exception du texte blanc sur fond accent, volontairement laissé en `#fff`) ; `.shell` reçoit `flex: 1; min-height: 0`, donc le menu latéral (qui s'étire déjà via `align-items: stretch`) occupe toute la hauteur disponible ; le mode clair est inchangé (mêmes valeurs hex reprises dans `:root`).
+  - Rien de reporté : les deux points de la demande sont traités entièrement.
+  - Le harnais n'a rien bloqué : `npm test` (5 tests) et `./scripts/verifier-deployabilite.sh` passaient du premier coup ; `npm run build` a généré les 10 routes sans erreur TypeScript/ESLint.
+  - Déployé : seule l'image frontend a changé, reconstruite, publiée, conteneur recréé ; `localhost:8080/`, `/coach` répondent 200, `localhost:8081/health` toujours 200. Version 8 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/app/globals.css` : ajoute les variables de palette (`--vert-texte`, `--violet-texte`, `--violet-accent`, `--violet-accent-hover`, `--violet-leger`, `--texte-doux`, `--carte-fond`, `--carte-fond-alt`, `--carte-bordure`, `--degrade-accueil`) avec leurs valeurs claires en `:root` et leurs overrides sombres dans le `@media` existant (y compris un `--background` sombre violet plutôt que le gris générique du gabarit Next.js) — sert le critère 1.
+    - `frontend/src/app/layout.module.css` : `.shell` reçoit `flex: 1; min-height: 0` (sert le critère 2) ; couleurs du pied de page converties en variables (sert le critère 1).
+    - `frontend/src/app/page.module.css`, `frontend/src/app/coach/page.module.css`, `frontend/src/app/tableau-de-bord/page.module.css`, `frontend/src/components/Sidebar.module.css`, `frontend/src/components/RubriqueBientotDisponible.module.css` : couleurs figées remplacées par les variables de palette — sert le critère 1.
+
+---
+
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
 7. Catalogue de modules fictifs enrichi, historique de conversation avec le coach, résumé de fin de session (jauge de progression, prochain rendez-vous) — parties d'`amelioration.md` non couvertes par les itérations 5 et 6, reportées après le hackathon faute de temps (60 puis 55 minutes restantes au moment de la demande des cadreurs).
 8. Contenu fonctionnel réel de Mon réseau / Mes rendez-vous / Mes ressources / Mes échanges — reporté, aucune spécification disponible (❓).
-9. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2.
-10. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — reporté.
-11. Dernière itération avant le pitch : stabilisation de ce qui est montré (pas de nouvelle fonctionnalité) — seulement si du temps subsiste après l'itération 6 ; sinon l'itération 6 est la dernière de ce hackathon.
+9. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — reporté.
+10. Dernière itération avant le pitch : stabilisation de ce qui est montré (pas de nouvelle fonctionnalité) — seulement si du temps subsiste après l'itération 7 ; sinon l'itération 7 est la dernière de ce hackathon.

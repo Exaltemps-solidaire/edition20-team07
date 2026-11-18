@@ -5,8 +5,8 @@
   width: 220px;
   flex-shrink: 0;
   padding: 24px 16px;
-  background: #faf7fe;
-  border-right: 1px solid #e4d9f5;
+  background: var(--carte-fond);
+  border-right: 1px solid var(--carte-bordure);
 }
 
 .nav {
@@ -18,12 +18,12 @@
 .lien {
   padding: 10px 12px;
   border-radius: 10px;
-  color: #4a2a7a;
+  color: var(--violet-texte);
   font-size: 14px;
 }
 
 .lien:hover {
-  background: #ede3fa;
+  background: var(--violet-leger);
 }
 
 .soutien {
@@ -31,16 +31,16 @@
   padding: 14px;
   border-radius: 12px;
   border: 1px solid var(--vert-doux);
-  background: #fff;
+  background: var(--carte-fond-alt);
 }
 
 .phrase {
   font-weight: 600;
-  color: #4a2a7a;
+  color: var(--violet-texte);
 }
 
 .assistance {
   margin-top: 4px;
   font-size: 12px;
-  color: #4b8f63;
+  color: var(--vert-texte);
 }

@@ -8,9 +8,9 @@
 .carte {
   padding: 24px;
   border-radius: 16px;
-  background: #faf7fe;
-  border: 1px solid #e4d9f5;
-  color: #4a2a7a;
+  background: var(--carte-fond);
+  border: 1px solid var(--carte-bordure);
+  color: var(--violet-texte);
 }
 
 .carte h1 {

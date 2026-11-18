@@ -5,7 +5,7 @@
   justify-content: center;
   min-height: 100vh;
   padding: 24px;
-  background: linear-gradient(180deg, #f6f2fb 0%, #ffffff 100%);
+  background: var(--degrade-accueil);
   font-family: var(--font-geist-sans);
 }
 
@@ -14,7 +14,7 @@
   max-width: 480px;
   padding: 40px;
   border-radius: 16px;
-  background: #ffffff;
+  background: var(--carte-fond-alt);
   box-shadow: 0 10px 30px rgba(124, 77, 189, 0.12);
   text-align: center;
 }
@@ -22,12 +22,12 @@
 .carte h1 {
   margin-bottom: 8px;
   font-size: 28px;
-  color: #4a2a7a;
+  color: var(--violet-texte);
 }
 
 .carte p {
   margin-bottom: 24px;
-  color: #666;
+  color: var(--texte-doux);
 }
 
 .personas {
@@ -42,17 +42,17 @@
   flex-direction: column;
   width: 100%;
   padding: 16px 20px;
-  border: 1px solid #e4d9f5;
+  border: 1px solid var(--carte-bordure);
   border-radius: 12px;
-  background: #faf7fe;
+  background: var(--carte-fond);
   text-align: left;
   cursor: pointer;
   transition: 0.2s;
 }
 
 .personas button:hover {
-  background: #7c4dbd;
-  border-color: #7c4dbd;
+  background: var(--violet-accent);
+  border-color: var(--violet-accent);
 }
 
 .personas button:hover strong,
@@ -62,10 +62,10 @@
 
 .personas strong {
   font-size: 16px;
-  color: #4a2a7a;
+  color: var(--violet-texte);
 }
 
 .personas span {
   font-size: 13px;
-  color: #666;
+  color: var(--texte-doux);
 }

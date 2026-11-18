@@ -17,11 +17,11 @@
 
 .entete h1 {
   font-size: 24px;
-  color: #4a2a7a;
+  color: var(--violet-texte);
 }
 
 .entete p {
-  color: #666;
+  color: var(--texte-doux);
 }
 
 .actionsEntete {
@@ -31,10 +31,10 @@
 
 .changer {
   padding: 8px 16px;
-  border: 1px solid #e4d9f5;
+  border: 1px solid var(--carte-bordure);
   border-radius: 999px;
-  background: #faf7fe;
-  color: #4a2a7a;
+  background: var(--carte-fond);
+  color: var(--violet-texte);
   cursor: pointer;
   white-space: nowrap;
 }
@@ -42,23 +42,23 @@
 .carte {
   padding: 24px;
   border-radius: 16px;
-  background: #faf7fe;
-  border: 1px solid #e4d9f5;
+  background: var(--carte-fond);
+  border: 1px solid var(--carte-bordure);
 }
 
 .carte h2 {
   margin-bottom: 12px;
   font-size: 18px;
-  color: #4a2a7a;
+  color: var(--violet-texte);
 }
 
 .stade {
   font-weight: 600;
-  color: #7c4dbd;
+  color: var(--violet-accent);
 }
 
 .thematique {
-  color: #666;
+  color: var(--texte-doux);
 }
 
 .reprendre {
@@ -66,12 +66,12 @@
   padding: 12px 20px;
   border: none;
   border-radius: 999px;
-  background: #7c4dbd;
+  background: var(--violet-accent);
   color: #fff;
   font-weight: 600;
   cursor: pointer;
 }
 
 .reprendre:hover {
-  background: #663e9d;
+  background: var(--violet-accent-hover);
 }
