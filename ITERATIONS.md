@@ -3,7 +3,7 @@
 **Plan validé le 2026-11-18** (le développeur a lancé `/iteration 1` sans correction du plan).
 
 - **Source du plan** : proposé par l'agent (aucun plan d'itérations trouvé dans la passation : ni fichier `cadrage/*iteration*`, ni clé `iterations` dans `passation.json`).
-- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes. Redemandé avant l'itération 4 : 30 minutes restantes (apparition d'`amelioration.md`, décision de dernière minute). Les cadreurs ont ensuite demandé l'implémentation complète d'`amelioration.md` ; redemandé avant l'itération 5 : 60 minutes, puis 55 minutes au lancement de l'itération 5 — capacité recalculée à 2 itérations complètes au plus (voir note ✂️ sous l'itération 4).
+- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes. Redemandé avant l'itération 4 : 30 minutes restantes (apparition d'`amelioration.md`, décision de dernière minute). Les cadreurs ont ensuite demandé l'implémentation complète d'`amelioration.md` ; redemandé avant l'itération 5 : 60 minutes, puis 55 minutes au lancement de l'itération 5 — capacité recalculée à 2 itérations complètes au plus (voir note ✂️ sous l'itération 4). L'itération 5 n'a coûté que 2 minutes de codage (10 estimées) ; redemandé au lancement de l'itération 6 : 50 minutes restantes — marge confortable pour cette itération.
 - **Durée du tour de test PM Lab** : 10 minutes (valeur par défaut, le développeur ne savait pas).
 - **Capacité estimée** : une itération coûte au moins (codage ≤10 min) + ~5 min de publication + 10 min de tour de test, soit 15 à 25 min. Sur 90 minutes, ~3 itérations complètes tiennent confortablement ; une 4e ne tient que si les précédentes vont plus vite que prévu.
 - **Hors périmètre** (repris du PRD, `passation/PASSATION.md`) : connexion/création de compte, paiement/adhésion, back-office, parcours ACTIV' et Sentinelle, recommandation BBA vs BIB, notifications push/email, gestion des ateliers socles.
@@ -176,7 +176,18 @@ Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `ame
 - **Codage estimé** : 10 minutes
 - **Fichiers prévus** : `frontend/src/app/globals.css` (palette), nouveau composant `Sidebar` + css, `frontend/src/app/layout.tsx` (intégration), nouvelles pages placeholder pour les 4 rubriques non développées.
 - **Tests unitaires prévus** : aucun (changement visuel/structurel, pas de logique métier nouvelle) ; `npm test` rejoué pour confirmer l'absence de régression.
-- **Bilan** : _à remplir en fin d'itération_
+- **Bilan** :
+  - Durée de codage réelle : 2 minutes (pas de dépassement).
+  - Critères d'acceptation : les 3 satisfaits — menu latéral visible une fois un persona choisi (vérifié par lecture du code, `Sidebar` ne se rend qu'avec `CLE_PERSONA` posé) ; palette violet/lavande/blanc + cartes arrondies déjà en place sur les écrans existants depuis les itérations précédentes, complétée par la touche de vert doux du bloc « Vous n'êtes pas seule » ; les 4 rubriques non développées répondent 200 avec « Bientôt disponible » (`curl localhost:8080/ressources` vérifié).
+  - ⚠️ **Dépassement du nombre de fichiers prévu** : 10 fichiers touchés (`Sidebar.tsx`/`.module.css`, `RubriqueBientotDisponible.tsx`/`.module.css`, 4 pages placeholder, `layout.tsx`, `layout.module.css`) contre ~5 dans la règle de taille générale — inhérent à un menu de 6 rubriques avec pages dédiées ; déjà anticipé dans le plan validé (« nouvelles pages placeholder pour les 4 rubriques »), pas une dérive découverte en cours de route.
+  - Reporté : contenu réel de Mon réseau/Mes rendez-vous/Mes ressources/Mes échanges (❓ aucune spécification fonctionnelle disponible, ni dans `amelioration.md` ni dans la passation) ; icônes et illustrations détaillées.
+  - Le harnais n'a rien bloqué : `npm test` (10 tests) et `./scripts/verifier-deployabilite.sh` passaient du premier coup ; `npm run build` (frontend) a généré les 10 routes sans erreur TypeScript/ESLint.
+  - Déployé : seule l'image frontend a changé, reconstruite, publiée, conteneur recréé ; `localhost:8080/`, `/ressources` répondent 200, `localhost:8081/health` toujours 200. Version 7 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/components/Sidebar.tsx` + `Sidebar.module.css` : créés — menu latéral à 6 rubriques, bloc « Vous n'êtes pas seule » + accès assistance (texte, pas de lien inventé faute de coordonnées réelles) — sert le critère 1.
+    - `frontend/src/components/RubriqueBientotDisponible.tsx` + `.module.css` : créés — composant partagé pour les 4 rubriques non développées — sert le critère 3.
+    - `frontend/src/app/ressources/page.tsx`, `reseau/page.tsx`, `echanges/page.tsx`, `rendez-vous/page.tsx` : créés — une route par rubrique, chacune un appel au composant partagé — sert le critère 3.
+    - `frontend/src/app/layout.tsx` + `layout.module.css` : intègrent la `Sidebar` dans une coquille flex (sidebar + contenu), pied de page inchangé — sert le critère 1.
 
 ---
 
