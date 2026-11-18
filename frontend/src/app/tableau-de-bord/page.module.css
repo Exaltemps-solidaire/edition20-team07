@@ -24,6 +24,11 @@
   color: #666;
 }
 
+.actionsEntete {
+  display: flex;
+  gap: 8px;
+}
+
 .changer {
   padding: 8px 16px;
   border: 1px solid #e4d9f5;

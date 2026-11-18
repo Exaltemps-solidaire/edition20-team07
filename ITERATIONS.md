@@ -3,7 +3,7 @@
 **Plan validé le 2026-11-18** (le développeur a lancé `/iteration 1` sans correction du plan).
 
 - **Source du plan** : proposé par l'agent (aucun plan d'itérations trouvé dans la passation : ni fichier `cadrage/*iteration*`, ni clé `iterations` dans `passation.json`).
-- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes.
+- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes.
 - **Durée du tour de test PM Lab** : 10 minutes (valeur par défaut, le développeur ne savait pas).
 - **Capacité estimée** : une itération coûte au moins (codage ≤10 min) + ~5 min de publication + 10 min de tour de test, soit 15 à 25 min. Sur 90 minutes, ~3 itérations complètes tiennent confortablement ; une 4e ne tient que si les précédentes vont plus vite que prévu.
 - **Hors périmètre** (repris du PRD, `passation/PASSATION.md`) : connexion/création de compte, paiement/adhésion, back-office, parcours ACTIV' et Sentinelle, recommandation BBA vs BIB, notifications push/email, gestion des ateliers socles.
@@ -91,13 +91,40 @@
 - **Fichiers prévus** : nouvelle page de dialogue côté front, une fonction de règle de suggestion (testable), un lien depuis le tableau de bord.
 - **Tests unitaires prévus** : 2 à 3, sur la fonction de règle de suggestion (un cas par état proposé).
 - **Étapes ajoutées à la démo** : depuis le tableau de bord, ouvrir le dialogue, répondre à la question, suivre la suggestion.
+- **Bilan** :
+  - Durée de codage réelle : 2 minutes (pas de dépassement).
+  - Critères d'acceptation : les 3 satisfaits — vérifiés par lecture du code et par build (route `/coach` générée, liens fonctionnels) ; la partie purement front (question → suggestion → retour) est indépendante de l'API, donc vérifiable localement sur `localhost:8080/coach`, contrairement au flux de reprise de l'itération 2.
+  - Reporté : rien de nouveau.
+  - Le harnais n'a rien bloqué : `npm test` (10 tests) et `./scripts/verifier-deployabilite.sh` passaient du premier coup.
+  - Déployé : seule l'image frontend a changé (l'API n'a pas bougé), reconstruite, publiée, conteneur recréé ; `localhost:8080/` et `/coach` répondent 200, `localhost:8081/health` toujours 200. Version 3 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/lib/coach.ts` : créé — `suggerer(etat)`, règle fixe à 3 cas (pas d'appel LLM) — sert le critère 2.
+    - `frontend/src/lib/coach.test.ts` : créé — 3 tests, un par état.
+    - `frontend/src/app/coach/page.tsx` + `page.module.css` : créés — écran de dialogue (question puis suggestion), le clic sur « Suivre » écrit la suggestion dans `sessionStorage` et revient au tableau de bord — sert les critères 1 et 3.
+    - `frontend/src/app/tableau-de-bord/page.tsx` + `page.module.css` : ajoute le bouton « Parler au coach » et une bannière « Suggestion du coach suivie » lue depuis `sessionStorage` — sert les critères 1 et 3.
+    - `e2e/demo.spec.ts` : deux étapes ajoutées (parler au coach, suivre la suggestion) — rejouables localement, contrairement aux étapes de reprise (itération 2) qui dépendent de l'API non proxée en local.
+
+---
+
+## Itération 4 : un catalogue de modules alimente le tableau de bord et les suggestions du coach
+
+- **Dans le périmètre** : un jeu de modules fictifs (titre, durée, thématique) dans un fichier de données partagé ; affiché dans le tableau de bord (section « Mes modules d'accompagnement », comme dans `passation/croquis/ecran-01-...png`) ; le coach puise sa suggestion dans ce catalogue (par thématique selon l'état choisi) au lieu d'un texte codé en dur à part.
+- **Hors périmètre** : progression personnelle sur chaque module du catalogue (seule « ma reprise » suit une progression, depuis l'itération 2) ; personnalisation du catalogue par persona.
+- **Critères d'acceptation** :
+  - Étant donné le tableau de bord affiché, quand je le consulte, alors je vois une section « Mes modules d'accompagnement » avec au moins 4 modules (titre, durée, thématique).
+  - Étant donné une réponse donnée au coach, quand il propose une suggestion, alors le module suggéré est un module du catalogue (même titre, même durée), pas un texte distinct.
+  - Étant donné deux états différents (ex. « difficile » et « en pleine forme »), quand je demande une suggestion, alors les modules proposés ont des thématiques cohérentes et différentes (repos vs remobilisation).
+- **Hypothèse de l'équipe couverte** : aucune hypothèse formelle du plan ; prépare le contenu nécessaire pour que les suggestions du coach (itération 3) soient crédibles au pitch, au lieu de 3 textes isolés.
+- **Codage estimé** : 7 minutes
+- **Fichiers prévus** : `frontend/src/lib/modules.ts` (catalogue + types), `frontend/src/lib/modules.test.ts`, `frontend/src/lib/coach.ts` (règle réécrite pour piocher dans le catalogue), `frontend/src/app/tableau-de-bord/page.tsx` + css (nouvelle section).
+- **Tests unitaires prévus** : 2 à 3 — un par état sur la nouvelle règle de suggestion basée catalogue, un sur la présence d'un module par thématique attendue.
+- **Étapes ajoutées à la démo** : vérifier la présence de la section « Mes modules d'accompagnement » sur le tableau de bord.
 - **Bilan** : _à remplir en fin d'itération_
 
 ---
 
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
-4. Catalogue de modules fictifs sur la santé du burn-out : un jeu de modules d'exemple (titre, durée, thématique), affiché dans le tableau de bord (section « Mes modules d'accompagnement » du prototype) et repris comme pool de suggestions par le coach de l'itération 3.
 5. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2 (demande ajoutée hors plan initial, dépassait la limite de 3 critères par itération).
-6. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — seulement si le temps restant le permet après l'itération 3 ; sinon signalé comme non fait au pitch.
+6. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — seulement si le temps restant le permet après l'itération 4 ; sinon signalé comme non fait au pitch.
 7. Dernière itération : stabilisation de ce qui sera montré au pitch (pas de nouvelle fonctionnalité).

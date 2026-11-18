@@ -28,4 +28,18 @@ test("Démo : le cas passant", async ({ page }) => {
     await page.reload();
     await expect(page.locator("strong").nth(1)).toHaveText(minuteApresClic);
   });
+
+  await test.step("Je parle au coach", async () => {
+    await page.getByRole("button", { name: "Parler au coach" }).click();
+    await expect(page.getByRole("heading", { name: "Comment vous sentez-vous aujourd'hui ?" })).toBeVisible();
+    await page.getByRole("button", { name: "Ça va" }).click();
+  });
+
+  await test.step("Je suis la suggestion et je reviens sur le contenu suggéré", async () => {
+    const suivre = page.getByRole("button", { name: /^Suivre :/ });
+    await expect(suivre).toBeVisible();
+    await suivre.click();
+    await expect(page.getByRole("heading", { name: "Suggestion du coach suivie" })).toBeVisible();
+    await expect(page.getByText("Je continue mon module en cours")).toBeVisible();
+  });
 });
