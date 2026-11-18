@@ -1,0 +1,71 @@
+.page {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: linear-gradient(180deg, #f6f2fb 0%, #ffffff 100%);
+  font-family: var(--font-geist-sans);
+}
+
+.carte {
+  width: 100%;
+  max-width: 480px;
+  padding: 40px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(124, 77, 189, 0.12);
+  text-align: center;
+}
+
+.carte h1 {
+  margin-bottom: 8px;
+  font-size: 28px;
+  color: #4a2a7a;
+}
+
+.carte p {
+  margin-bottom: 24px;
+  color: #666;
+}
+
+.personas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+}
+
+.personas button {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #e4d9f5;
+  border-radius: 12px;
+  background: #faf7fe;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.personas button:hover {
+  background: #7c4dbd;
+  border-color: #7c4dbd;
+}
+
+.personas button:hover strong,
+.personas button:hover span {
+  color: #ffffff;
+}
+
+.personas strong {
+  font-size: 16px;
+  color: #4a2a7a;
+}
+
+.personas span {
+  font-size: 13px;
+  color: #666;
+}

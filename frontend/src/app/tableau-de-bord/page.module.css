@@ -1,0 +1,72 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: var(--font-geist-sans);
+}
+
+.entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.entete h1 {
+  font-size: 24px;
+  color: #4a2a7a;
+}
+
+.entete p {
+  color: #666;
+}
+
+.changer {
+  padding: 8px 16px;
+  border: 1px solid #e4d9f5;
+  border-radius: 999px;
+  background: #faf7fe;
+  color: #4a2a7a;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.carte {
+  padding: 24px;
+  border-radius: 16px;
+  background: #faf7fe;
+  border: 1px solid #e4d9f5;
+}
+
+.carte h2 {
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: #4a2a7a;
+}
+
+.stade {
+  font-weight: 600;
+  color: #7c4dbd;
+}
+
+.thematique {
+  color: #666;
+}
+
+.reprendre {
+  margin-top: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 999px;
+  background: #7c4dbd;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.reprendre:hover {
+  background: #663e9d;
+}
