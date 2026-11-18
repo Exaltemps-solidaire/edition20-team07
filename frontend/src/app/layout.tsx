@@ -24,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         {children}
         <footer className={styles.piedDePage}>
-          <p className={styles.logo}>Femmes En Équilibre</p>
+          <p className={styles.logo}>L&apos;BURN</p>
           <p className={styles.signature}>Soutenir · Accompagner · Rebondir</p>
         </footer>
       </body>

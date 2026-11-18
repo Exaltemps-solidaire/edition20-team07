@@ -131,6 +131,7 @@ Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `ame
     - `frontend/src/app/layout.module.css` : créé — styles du pied de page (`.piedDePage`, `.logo`, `.signature`) — sert les critères 1 et 2.
     - `frontend/src/app/globals.css` : ajoute le jeton `--vert-doux` à `:root` — sert le critère 2.
     - `frontend/src/app/layout.tsx` : ajoute le pied de page (logo + signature) dans le layout racine, visible sur tout écran — sert le critère 1.
+  - **Correction après signal de la version 4** : demande du développeur de remplacer le texte du logo « Femmes En Équilibre » par « L'BURN » partout dans le code (`layout.tsx`, commentaire de `globals.css`). ❗️Signalé : la passation distingue le nom de l'association (L'BURN) de celui du produit affiché dans la maquette d'origine (Femmes En Équilibre) ; le développeur a confirmé vouloir L'BURN partout malgré cet écart avec la passation. Aucune logique touchée, redéployé en version 5.
 
 ---
 
