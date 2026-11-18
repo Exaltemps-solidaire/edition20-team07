@@ -5,12 +5,12 @@ import { CLE_PERSONA } from "@/app/page";
 import styles from "./Sidebar.module.css";
 
 const RUBRIQUES = [
-  { href: "/tableau-de-bord", libelle: "Mon espace" },
-  { href: "/coach", libelle: "Mon parcours" },
-  { href: "/ressources", libelle: "Mes ressources" },
-  { href: "/reseau", libelle: "Mon réseau" },
-  { href: "/echanges", libelle: "Mes échanges" },
-  { href: "/rendez-vous", libelle: "Mes rendez-vous" },
+  { href: "/tableau-de-bord", libelle: "Mon espace", icone: "🏠" },
+  { href: "/coach", libelle: "Mon parcours", icone: "🧭" },
+  { href: "/ressources", libelle: "Mes ressources", icone: "📚" },
+  { href: "/reseau", libelle: "Mon réseau", icone: "🤝" },
+  { href: "/echanges", libelle: "Mes échanges", icone: "💬" },
+  { href: "/rendez-vous", libelle: "Mes rendez-vous", icone: "📅" },
 ];
 
 export default function Sidebar() {
@@ -22,6 +22,9 @@ export default function Sidebar() {
       <nav className={styles.nav}>
         {RUBRIQUES.map((rubrique) => (
           <Link key={rubrique.href} href={rubrique.href} className={styles.lien}>
+            <span className={styles.icone} aria-hidden="true">
+              {rubrique.icone}
+            </span>
             {rubrique.libelle}
           </Link>
         ))}

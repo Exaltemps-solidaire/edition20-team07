@@ -215,6 +215,28 @@ Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `ame
 
 ---
 
+## Itération 8 : Une icône par rubrique du menu latéral
+
+- **Dans le périmètre** : demande directe du développeur. Chaque entrée du menu (`Sidebar`) affiche une icône (emoji, cohérent avec le style déjà utilisé dans `modules.ts`) à côté de son libellé.
+- **Hors périmètre** : icônes SVG dédiées, animation au survol au-delà de l'existant.
+- **Critères d'acceptation** :
+  - Étant donné le menu latéral affiché, quand je le regarde, alors chacune des 6 rubriques porte une icône distincte à côté de son libellé.
+  - Étant donné le mode clair ou sombre, quand le menu s'affiche, alors l'alignement icône/texte reste propre dans les deux cas (pas de régression du thème sombre de l'itération 7).
+- **Codage estimé** : 3 minutes
+- **Fichiers prévus** : `frontend/src/components/Sidebar.tsx`, `frontend/src/components/Sidebar.module.css`.
+- **Tests unitaires prévus** : aucun — changement purement visuel, pas de logique métier.
+- **Bilan** :
+  - Durée de codage réelle : 1 minute (pas de dépassement).
+  - Critères d'acceptation : les 2 satisfaits — vérifié par capture d'écran (Playwright) : les 6 rubriques portent chacune une icône distincte (🏠🧭📚🤝💬📅), alignée avec le libellé, rendu correct en mode clair (le mode sombre réutilise les mêmes règles d'alignement, non revérifié par capture mais aucune couleur en dur ajoutée).
+  - Rien de reporté.
+  - Le harnais n'a rien bloqué : `npm test` (5 tests) et `./scripts/verifier-deployabilite.sh` passaient du premier coup ; `npm run build` a généré les 10 routes sans erreur.
+  - Déployé : seule l'image frontend a changé, reconstruite, publiée, conteneur recréé ; `localhost:8081/health` toujours 200, rendu vérifié par capture d'écran sur `localhost:8080/tableau-de-bord`. Version 9 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/components/Sidebar.tsx` : chaque rubrique porte désormais un champ `icone` (emoji), rendu dans un `<span aria-hidden="true">` avant le libellé — sert le critère 1.
+    - `frontend/src/components/Sidebar.module.css` : `.lien` passe en flex avec un `gap` pour aligner icône et texte ; nouvelle règle `.icone` pour la taille — sert les 2 critères.
+
+---
+
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
 7. Catalogue de modules fictifs enrichi, historique de conversation avec le coach, résumé de fin de session (jauge de progression, prochain rendez-vous) — parties d'`amelioration.md` non couvertes par les itérations 5 et 6, reportées après le hackathon faute de temps (60 puis 55 minutes restantes au moment de la demande des cadreurs).
