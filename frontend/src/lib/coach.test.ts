@@ -1,16 +1,22 @@
-import { describe, expect, it } from "vitest";
-import { suggerer } from "./coach";
+import { describe, expect, test } from "vitest";
+import { suggererModule } from "./coach";
 
-describe("suggerer", () => {
-  it("propose une pause quand l'état est difficile", () => {
-    expect(suggerer("difficile").module).toBe("Respiration et ancrage (3 min)");
+describe("suggererModule", () => {
+  test("retourne un module de la thématique demandée", () => {
+    const resultat = suggererModule(3, "reconstruction");
+    expect(resultat.thematique).toBe("reconstruction");
   });
 
-  it("propose de continuer le module en cours quand ça va", () => {
-    expect(suggerer("ca-va").module).toBe("Je continue mon module en cours");
+  test("deux niveaux différents proposent des modules différents dans une même thématique", () => {
+    const a = suggererModule(1, "reconstruction");
+    const b = suggererModule(2, "reconstruction");
+    expect(a.titre).not.toBe(b.titre);
   });
 
-  it("propose un module plus exigeant quand on est en forme", () => {
-    expect(suggerer("en-forme").module).toBe("Réévaluer vos priorités");
+  test("les deux thématiques proposent des modules distincts", () => {
+    const a = suggererModule(3, "reconstruction");
+    const b = suggererModule(3, "remobilisation");
+    expect(a.titre).not.toBe(b.titre);
+    expect(a.thematique).not.toBe(b.thematique);
   });
 });

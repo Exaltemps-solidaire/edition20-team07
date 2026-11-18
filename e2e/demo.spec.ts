@@ -31,15 +31,19 @@ test("Démo : le cas passant", async ({ page }) => {
 
   await test.step("Je parle au coach", async () => {
     await page.getByRole("button", { name: "Parler au coach" }).click();
-    await expect(page.getByRole("heading", { name: "Comment vous sentez-vous aujourd'hui ?" })).toBeVisible();
-    await page.getByRole("button", { name: "Ça va" }).click();
+    await expect(page.getByRole("heading", { name: "Comment vous sentez-vous actuellement ?" })).toBeVisible();
   });
 
-  await test.step("Je suis la suggestion et je reviens sur le contenu suggéré", async () => {
-    const suivre = page.getByRole("button", { name: /^Suivre :/ });
-    await expect(suivre).toBeVisible();
-    await suivre.click();
+  await test.step("Je sélectionne mon niveau et ma thématique (scénario Julie : stade 3, En reconstruction)", async () => {
+    await page.getByRole("button", { name: "Sous pression" }).click();
+    await expect(page.getByText("Vous semblez vous situer au stade 3")).toBeVisible();
+    await page.getByRole("button", { name: /En reconstruction/ }).click();
+  });
+
+  await test.step("Je découvre le module suggéré et je reviens sur le contenu suggéré", async () => {
+    const decouvrir = page.getByRole("button", { name: "Découvrir le module" });
+    await expect(decouvrir).toBeVisible();
+    await decouvrir.click();
     await expect(page.getByRole("heading", { name: "Suggestion du coach suivie" })).toBeVisible();
-    await expect(page.getByText("Je continue mon module en cours")).toBeVisible();
   });
 });

@@ -21,15 +21,55 @@
   color: #4a2a7a;
 }
 
-.reponses {
+.niveaux {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.niveau,
+.niveauActif {
+  padding: 10px 14px;
+  border: 1px solid #e4d9f5;
+  border-radius: 999px;
+  background: #fff;
+  color: #4a2a7a;
+  cursor: pointer;
+}
+
+.niveauActif {
+  background: #7c4dbd;
+  color: #fff;
+  border-color: #7c4dbd;
+}
+
+.message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #f2ebfb;
+}
+
+.disclaimer {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+.thematiques {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 16px;
 }
 
-.reponses button {
-  padding: 12px 16px;
+.thematiqueCarte,
+.thematiqueActive {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
   border: 1px solid #e4d9f5;
   border-radius: 12px;
   background: #fff;
@@ -38,12 +78,31 @@
   cursor: pointer;
 }
 
-.reponses button:hover {
-  background: #f2ebfb;
+.thematiqueActive {
+  background: #ede3fa;
+  border-color: #7c4dbd;
 }
 
-.suivre {
+.moduleCarte {
   margin-top: 16px;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #a9d8b4;
+  text-align: center;
+}
+
+.icone {
+  font-size: 32px;
+}
+
+.duree {
+  color: #4b8f63;
+  font-size: 13px;
+}
+
+.decouvrir {
+  margin-top: 12px;
   padding: 12px 20px;
   border: none;
   border-radius: 999px;
@@ -53,6 +112,6 @@
   cursor: pointer;
 }
 
-.suivre:hover {
+.decouvrir:hover {
   background: #663e9d;
 }

@@ -3,7 +3,7 @@
 **Plan validé le 2026-11-18** (le développeur a lancé `/iteration 1` sans correction du plan).
 
 - **Source du plan** : proposé par l'agent (aucun plan d'itérations trouvé dans la passation : ni fichier `cadrage/*iteration*`, ni clé `iterations` dans `passation.json`).
-- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes.
+- **Temps restant annoncé** : 90 minutes (demandé le 2026-11-18). Redemandé au début de l'itération 1 : ~85 minutes restantes. Redemandé au début de l'itération 2 : 70 minutes restantes. Redemandé au début de l'itération 3 : 60 minutes restantes. Redemandé avant l'itération 4 : 30 minutes restantes (apparition d'`amelioration.md`, décision de dernière minute). Les cadreurs ont ensuite demandé l'implémentation complète d'`amelioration.md` ; redemandé avant l'itération 5 : 60 minutes, puis 55 minutes au lancement de l'itération 5 — capacité recalculée à 2 itérations complètes au plus (voir note ✂️ sous l'itération 4).
 - **Durée du tour de test PM Lab** : 10 minutes (valeur par défaut, le développeur ne savait pas).
 - **Capacité estimée** : une itération coûte au moins (codage ≤10 min) + ~5 min de publication + 10 min de tour de test, soit 15 à 25 min. Sur 90 minutes, ~3 itérations complètes tiennent confortablement ; une 4e ne tient que si les précédentes vont plus vite que prévu.
 - **Hors périmètre** (repris du PRD, `passation/PASSATION.md`) : connexion/création de compte, paiement/adhésion, back-office, parcours ACTIV' et Sentinelle, recommandation BBA vs BIB, notifications push/email, gestion des ateliers socles.
@@ -135,10 +135,55 @@ Redemandé au début de l'itération 4 : 30 minutes restantes. À ce stade, `ame
 
 ---
 
+## Itération 5 : Parcours du coach façon `amelioration.md` (échelle de burn-out + thématique + module suggéré)
+
+**Plan validé le 2026-11-18** (les cadreurs ont demandé l'implémentation complète d'`amelioration.md` ; le développeur a lancé `/iteration 5` directement sur le découpage proposé en 2 itérations, sans correction).
+
+- **Dans le périmètre** : remplace l'écran coach à 3 boutons par un parcours à 3 étapes — (1) question d'état, (2) sélection d'un niveau parmi 5 (Équilibre, Vigilance, Sous pression, En difficulté, Épuisement) avec le disclaimer « outil de repérage, pas un diagnostic médical », (3) choix d'une thématique (En reconstruction / En remobilisation) — puis affichage d'une carte de module adaptée (icône, titre, description, durée, bouton « Découvrir »), qui réutilise le mécanisme existant de suivi vers le tableau de bord.
+- **Hors périmètre** : plusieurs modules recommandés simultanément, zone de saisie libre, historique de conversation, personnalisation par persona au-delà de l'état/thématique choisis — reportés (voir « À venir »).
+- **Critères d'acceptation** :
+  - Étant donné l'écran coach, quand je sélectionne un niveau parmi les 5, alors ce niveau est mis en évidence et un message explicatif (avec le disclaimer) s'affiche.
+  - Étant donné un niveau choisi, quand je sélectionne une thématique, alors une carte de module adaptée s'affiche (icône, titre, description, durée, bouton « Découvrir »).
+  - Étant donné la carte affichée, quand je clique sur « Découvrir le module », alors je reviens au tableau de bord avec ce module affiché comme suggestion suivie.
+- **Hypothèse de l'équipe couverte** : aucune hypothèse formelle du plan initial ; reprend les points 4 et 7 d'`amelioration.md` (parcours conversationnel, scénario Julie), demandé par les cadreurs.
+- **Codage estimé** : 10 minutes
+- **Fichiers prévus** : `frontend/src/lib/modules.ts` (nouveau, petit catalogue par thématique), `frontend/src/lib/coach.ts` (règle réécrite : niveau + thématique → module), `frontend/src/lib/coach.test.ts`, `frontend/src/app/coach/page.tsx` + `page.module.css` (parcours à 3 étapes).
+- **Tests unitaires prévus** : 2 à 3, sur la nouvelle règle de suggestion (niveau + thématique → module cohérent).
+- **Étapes ajoutées à la démo** : sélection d'un niveau, sélection d'une thématique, affichage et suivi du module suggéré.
+- **Bilan** :
+  - Durée de codage réelle : 2 minutes (pas de dépassement, largement sous le budget de 10 minutes).
+  - Critères d'acceptation : les 3 satisfaits — vérifiés par `curl localhost:8080/coach` (nouveau texte de la question présent) et par lecture du code (sélection de niveau → highlight + message + disclaimer ; sélection de thématique → carte de module ; clic « Découvrir » → écrit la suggestion et redirige vers le tableau de bord, mécanisme déjà testé à l'itération 3).
+  - Reporté : plusieurs modules recommandés à la fois, zone de saisie libre, historique de conversation — voir « À venir ».
+  - Le harnais n'a rien bloqué : `npm test` (10 tests) et `./scripts/verifier-deployabilite.sh` passaient du premier coup.
+  - Déployé : seule l'image frontend a changé (l'API n'a pas bougé), reconstruite, publiée, conteneur recréé ; `localhost:8080/coach` répond 200 avec le nouveau parcours, `localhost:8081/health` toujours 200. Version 6 signalée à PM Lab.
+  - **Modifications** :
+    - `frontend/src/lib/modules.ts` : créé — catalogue de 4 modules fictifs par thématique (reconstruction/remobilisation), icône/titre/description/durée — sert le critère 2.
+    - `frontend/src/lib/coach.ts` : réécrit — `suggererModule(niveau, thematique)` pioche dans le catalogue au lieu d'un texte canné par état ; garde `Suggestion`/`suggestionDepuisModule` pour rester compatible avec le tableau de bord (aucun fichier du tableau de bord à toucher) — sert les critères 2 et 3.
+    - `frontend/src/lib/coach.test.ts` : réécrit — 3 tests sur `suggererModule` (thématique respectée, niveaux différents → modules différents, thématiques différentes → modules distincts).
+    - `frontend/src/app/coach/page.tsx` + `page.module.css` : réécrits — parcours à 3 étapes (niveau à 5 valeurs avec disclaimer, thématique, carte de module) remplaçant les 3 boutons d'état de l'itération 3 — sert les 3 critères.
+    - `e2e/demo.spec.ts` : étapes « coach » mises à jour pour le nouveau parcours (scénario Julie : stade 3, En reconstruction) — non rejouées localement faute de temps dans ce budget, à vérifier par l'équipe sur `$URL_PUBLIQUE`.
+
+---
+
+## Itération 6 : Identité graphique globale + coquille de navigation latérale
+
+- **Dans le périmètre** : palette violet pastel/lavande/blanc/vert doux appliquée aux écrans existants (accueil, tableau de bord, coach), cartes à angles arrondis ; menu latéral avec les 6 rubriques d'`amelioration.md` (Mon espace, Mon parcours, Mes ressources, Mon réseau, Mes échanges, Mes rendez-vous), bloc « Vous n'êtes pas seule » et accès assistance.
+- **Hors périmètre** : contenu réel de Mon réseau/Mes rendez-vous/Mes ressources/Mes échanges — aucune spécification fonctionnelle dans `amelioration.md` ni dans la passation (❓ à lever avec les cadreurs après le hackathon) ; faute de temps, ces rubriques affichent un état « Bientôt disponible » plutôt qu'être fonctionnelles, ce qui **revient sur la réponse donnée avant la contrainte des 60 minutes** (« les rendre fonctionnelles »).
+- **Critères d'acceptation** :
+  - Étant donné un persona choisi, quand j'arrive sur un écran, alors je vois le menu latéral avec les 6 rubriques, « Vous n'êtes pas seule » et l'accès assistance.
+  - Étant donné les écrans existants, quand ils s'affichent, alors ils utilisent la palette violet pastel/lavande/blanc/vert doux et des cartes à angles arrondis.
+  - Étant donné une rubrique non développée, quand j'y clique, alors un état « Bientôt disponible » s'affiche clairement, sans erreur.
+- **Codage estimé** : 10 minutes
+- **Fichiers prévus** : `frontend/src/app/globals.css` (palette), nouveau composant `Sidebar` + css, `frontend/src/app/layout.tsx` (intégration), nouvelles pages placeholder pour les 4 rubriques non développées.
+- **Tests unitaires prévus** : aucun (changement visuel/structurel, pas de logique métier nouvelle) ; `npm test` rejoué pour confirmer l'absence de régression.
+- **Bilan** : _à remplir en fin d'itération_
+
+---
+
 ## À venir (non détaillé, ordre de priorité de l'équipe)
 
-5. Catalogue de modules fictifs alimentant le tableau de bord et les suggestions du coach — détaillé une première fois comme « itération 4 » avant l'arrivée d'`amelioration.md` et le recalcul de capacité à 30 minutes restantes ; non codé, reporté après le hackathon avec le reste.
-6. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2.
-7. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — reporté.
-8. `amelioration.md` dans son ensemble (historique de conversation, identité graphique complète, navigation latérale avec « Mon réseau »/« Mes rendez-vous » fonctionnels, parcours conversationnel du coach en 4 étapes avec échelle de burn-out, cartes de modules enrichies, résumé de fin de session) — repéré pendant le hackathon, trop large pour le temps restant ; à soumettre aux cadreurs comme périmètre de suite.
-9. Dernière itération avant le pitch : stabilisation de ce qui est montré (pas de nouvelle fonctionnalité) — à faire si du temps subsiste après l'itération 4 ci-dessus ; sinon, l'itération 4 (cosmétique) est la dernière de ce hackathon.
+7. Catalogue de modules fictifs enrichi, historique de conversation avec le coach, résumé de fin de session (jauge de progression, prochain rendez-vous) — parties d'`amelioration.md` non couvertes par les itérations 5 et 6, reportées après le hackathon faute de temps (60 puis 55 minutes restantes au moment de la demande des cadreurs).
+8. Contenu fonctionnel réel de Mon réseau / Mes rendez-vous / Mes ressources / Mes échanges — reporté, aucune spécification disponible (❓).
+9. Prise en charge du thème sombre des navigateurs — reporté de l'itération 2.
+10. Retour en direct dans le fil de conversation avec le coach (👍/👎 sur une suggestion, enregistré) — reporté.
+11. Dernière itération avant le pitch : stabilisation de ce qui est montré (pas de nouvelle fonctionnalité) — seulement si du temps subsiste après l'itération 6 ; sinon l'itération 6 est la dernière de ce hackathon.
